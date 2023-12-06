@@ -1,0 +1,32 @@
+import requests as req
+from bs4 import BeautifulSoup as bs
+j = 0
+ENG_RUS = {}
+RUS_ENG = {}
+ntext = []
+text = input().split()
+t = input()
+site = req.get(input()).content.decode('utf-8')
+soup = bs(site,'lxml')
+for i in soup.find_all('td'):
+    if j%2 == 0:
+        p = i.text
+        ENG_RUS[p] = 0
+    else:
+        ENG_RUS[p] = i.text
+    j+=1
+for i in ENG_RUS:
+    RUS_ENG[ENG_RUS[i]] = i
+if t == 'ENG,RUS':
+    for i in text:
+        if ENG_RUS[i] != '' and i in ENG_RUS:
+            ntext.append(ENG_RUS[i].strip())
+        elif i not in ENG_RUS:
+            ntext.append(i)
+else:
+    for i in text:
+        if i in RUS_ENG:
+            ntext.append(RUS_ENG[i].strip())
+        elif i not in RUS_ENG:
+            ntext.append(i)
+print(*ntext, sep=' ')
